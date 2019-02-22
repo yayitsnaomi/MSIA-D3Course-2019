@@ -19,23 +19,73 @@ svg {
 <script>
 
 var data = [
-  {"date": "12/2018", "count": 233}
-  {"date": "11/2018", "count": 228}
-  {"date": "10/2018", "count": 262}
-  {"date": "09/2018", "count": 293}
-  {"date": "08/2018", "count": 350}
-  {"date": "07/2018", "count": 400}
-  {"date": "06/2018", "count": 225}
-  {"date": "05/2018", "count": 243}
-  {"date": "04/2018", "count": 221}
-  {"date": "03/2018", "count": 235}
-  {"date": "02/2018", "count": 235}
+  {"date": "12/2018", "count": 233},
+  {"date": "11/2018", "count": 228},
+  {"date": "10/2018", "count": 262},
+  {"date": "09/2018", "count": 293},
+  {"date": "08/2018", "count": 350},
+  {"date": "07/2018", "count": 400},
+  {"date": "06/2018", "count": 225},
+  {"date": "05/2018", "count": 243},
+  {"date": "04/2018", "count": 221},
+  {"date": "03/2018", "count": 235},
+  {"date": "02/2018", "count": 235},
   {"date": "01/2018", "count": 311}
 ];
-window.data = data;
-  
-//   *************************
-//     NEW CODE GOES HERE
-//   *************************
 
+
+//var width = 720;
+//var height = 400;
+var radius = 10;
+// format data
+data.forEach(function(d) {
+  d.count = +d.count;
+  d.month = d.date.split('/')[0];
+});
+// create svg
+var svg = d3.select('body').append('svg')
+  .attr('width', width)
+  .attr('height', height);
+
+var margin = {top: 20, right: 10, bottom: 20, left: 10};
+
+var width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+// scales
+var xScale = d3.scaleLinear()
+  .domain([1,12])
+  .range([0, width])
+var yScale = d3.scaleLinear()
+  .domain([0, 400])
+  .range([0, height])
+// create circles
+var circles = svg.selectAll('.ufoCircle')
+  .data(data)
+  .enter().append('circle')
+  .attr('cx', function(d) { return xScale(d.month) })
+  .attr('cy', function(d) { return yScale(d.count) })
+  .attr('r', radius);
+
+
+
+ //create text
+ var text = svg.selectAll('text')
+  .data(data)
+  .enter().append('text') 
+  .attr('x', function(d) { return xScale(d.month) })
+  .attr('y', function(d) { return yScale(d.count) })
+  .text(function(d) { return d.count;})
+  .attr('dx', radius)
+  .attr('dy', radius);
+
+
+  
 </script>
